@@ -111,16 +111,23 @@ function AddOrderPage() {
             </FormControl>
 
             <FormControl fullWidth sx={{ mb: 3 }}>
-              <InputLabel>
-                Select Dishes (Hold Ctrl to select multiple)
-              </InputLabel>
+              <InputLabel id="dishes-label">Select Dishes</InputLabel>
               <Select
+                labelId="dishes-label"
                 multiple
                 value={selectedDishes}
-                onChange={handleDishSelection}
+                onChange={(e) => setSelectedDishes(e.target.value)}
                 required
-                label="Select Dishes"
                 sx={{ borderRadius: 4 }}
+                renderValue={(selected) =>
+                  selected
+                    .map((dishId) => {
+                      const dish = dishes.find((d) => d.idDishes === dishId);
+                      return dish ? `${dish.name} - ${dish.price}₪` : '';
+                    })
+
+                    .join(', ')
+                }
               >
                 {dishes.map((dish) => (
                   <MenuItem key={dish.idDishes} value={dish.idDishes}>
@@ -135,7 +142,7 @@ function AddOrderPage() {
               color="text.secondary"
               sx={{ fontWeight: 500, mb: 2 }}
             >
-              Total Price:{' '}
+              Total Price:
               <span className="badge bg-warning">{totalPrice}₪</span>
             </Typography>
 
